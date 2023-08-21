@@ -19,7 +19,7 @@ This CLI tool integrates with the [vasu-playwright-utils](https://www.npmjs.com/
 You can install `playwright-ts-cli` globally using npm:
 
 ```bash
-npm install -g playwright-ts-cli
+npm install -g vasu-playwright-cli
 ```
 
 ### Update Playwright Library

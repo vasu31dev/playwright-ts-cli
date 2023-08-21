@@ -43,7 +43,8 @@ async function createPackageJson(
 }
 
 export async function initProject() {
-  const repo = "vasu31dev/playwright-ts-template#main";
+  const repo =
+    "direct:https://github.com/vasu31dev/playwright-ts-template.git#main";
   const filesAndDirs = [
     ".husky",
     "src/vasu-playwright/setup",
@@ -67,6 +68,10 @@ export async function initProject() {
   ];
 
   try {
+    // Remove temp-repo if it exists
+    if (fs.existsSync("temp-repo")) {
+      fs.removeSync("temp-repo");
+    }
     await downloadRepo(repo, "temp-repo");
     await copyFiles(filesAndDirs, "temp-repo", process.cwd());
     await createPackageJson(
@@ -77,9 +82,17 @@ export async function initProject() {
     fs.removeSync("temp-repo");
     console.log("Project initialized successfully!");
     await runCommand("git", ["init"], "Initializing Git repository...");
+    await runCommand(
+      "git",
+      ["branch", "-m", "main"],
+      "Renaming branch to 'main'..."
+    );
     await runCommand("npm", ["install"], "Running npm install...");
   } catch (error) {
-    console.error("Failed to initialize project:", error);
+    console.error(
+      "Failed to initialize project. Please check your internet connection and try again."
+    );
+    console.error("Error details:", error);
   }
 }
 
