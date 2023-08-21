@@ -1,0 +1,44 @@
+{
+  "name": "vasu-playwright-cli",
+  "version": "0.1.0",
+  "description": "Initializing Playwright TypeScript project with sample tests and framework setup",
+  "repository": "github:vasu31dev/playwright-ts-template",
+  "homepage": "https://github.com/vasu31dev/playwright-ts-template#readme",
+  "author": {
+    "name": "Vasudeva Annam",
+    "email": "vasu31dev@gmail.com"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "main": "./dist/index.js",
+  "bin": {
+    "vasu-playwright-cli": "./dist/index.js"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node ./index.ts",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "esbuild --bundle src/cli.ts --outfile=dist/index.js --platform=node --target=es6 --external:electron",
+    "watch": "npm run build -- --watch",
+    "prepublish": "npm run build",
+    "link": "npm run build && npm link",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.5.1",
+    "commander": "^11.0.0",
+    "download-git-repo": "^3.0.2",
+    "esbuild": "^0.19.2",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^9.2.10",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "5.1.6"
+  },
+  "dependencies": {
+    "execa": "^8.0.1"
+  }
+}
