@@ -14,9 +14,9 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "main": "./dist/index.js",
+  "main": "./dist/cli.js",
   "bin": {
-    "vasu-playwright-cli": "./dist/index.js"
+    "vasu-playwright-cli": "./dist/cli.js"
   },
   "keywords": [
     "playwright",
@@ -36,7 +36,7 @@
     "start": "ts-node ./index.ts",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build": "esbuild --bundle src/cli.ts --outfile=dist/index.js --platform=node --target=es6 --external:electron",
+    "build": "tsc",
     "watch": "npm run build -- --watch",
     "prepublish": "npm run build",
     "link": "npm run build && npm link",
@@ -47,7 +47,6 @@
     "@types/node": "^20.5.1",
     "commander": "^11.0.0",
     "download-git-repo": "^3.0.2",
-    "esbuild": "^0.19.2",
     "fs-extra": "^11.1.1",
     "inquirer": "^9.2.10",
     "rimraf": "^5.0.1",
