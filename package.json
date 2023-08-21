@@ -1,9 +1,12 @@
 {
   "name": "vasu-playwright-cli",
   "version": "0.1.0",
-  "description": "Initializing Playwright TypeScript project with sample tests and framework setup",
-  "repository": "github:vasu31dev/playwright-ts-template",
+  "description": "Playwright TypeScript CLI to initialize/update with sample plywright tests, framework setup and utilities",
+  "repository": "github:vasu31dev/playwright-ts-cli",
   "homepage": "https://github.com/vasu31dev/playwright-ts-template#readme",
+  "bugs": {
+    "url": "https://github.com/vasu31dev/playwright-ts-cli/issues"
+  },
   "author": {
     "name": "Vasudeva Annam",
     "email": "vasu31dev@gmail.com"
@@ -15,7 +18,20 @@
   "bin": {
     "vasu-playwright-cli": "./dist/index.js"
   },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "cli",
+    "framework",
+    "template"
+  ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "ts-node ./index.ts",
     "clean": "rimraf dist",
@@ -37,8 +53,5 @@
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
     "typescript": "5.1.6"
-  },
-  "dependencies": {
-    "execa": "^8.0.1"
   }
 }
