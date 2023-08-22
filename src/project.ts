@@ -47,14 +47,14 @@ export async function initProject() {
     "direct:https://github.com/vasu31dev/playwright-ts-template.git#main";
   const filesAndDirs = [
     ".husky",
-    "src/vasu-playwright/setup",
-    "src/vasu-playwright/utils",
+    "src",
     "tests",
     ".eslintignore",
     ".eslintrc",
     ".gitignore",
     ".prettierignore",
     ".prettierrc",
+    "package-lock.json",
     "playwright.config.ts",
     "tsconfig.json",
   ];
