@@ -1,14 +1,23 @@
+## [0.4.0] - 2023-08-23
+
+### Added
+
+- Created new Playwright framework project with entire [vasu-playwright-template](https://github.com/vasu31dev/playwright-ts-template).
+- Improved the logic to modify the `package.json` as needed.
+- Added Readme documentation to the downloaded Playwright framework.
+- Added sections for running tests and viewing reports in Readme documentation.
+
 ## [0.3.2] - 2023-08-23
 
 ### Updated
 
-- Improved Readme doc with pre-requisites, better installation steps and proper explanation
+- Enhanced Readme documentation with prerequisites, refined installation steps, and comprehensive explanations.
 
 ## [0.3.1] - 2023-08-22
 
 ### Fixed
 
-- Removed postinstall script
+- Removed post-install script.
 
 ## [0.3.0] - 2023-08-22
 
@@ -21,7 +30,7 @@
 
 ### Fixed
 
-- Fixed git warning related to the initial branch name.
+- Fixed Git warning related to the initial branch name.
 
 ## [0.2.2] - 2023-08-22
 

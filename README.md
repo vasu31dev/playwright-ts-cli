@@ -49,8 +49,8 @@ Before installing the CLI, make sure to have Node.js installed on your system. H
 ### 2. Create a Playwright Test Directory
 
 ```bash
-mkdir playwright-tests
-cd playwright-tests
+mkdir playwright-e2e-tests
+cd playwright-e2e-tests
 ```
 
 ### 3. Install `vasu-playwright-cli`
@@ -92,6 +92,20 @@ Keep your Playwright library up to date with the latest playwright utilities whi
 
 ```bash
 npm i vasu-playwright-utils
+```
+
+### Running Tests
+
+To make sure the project framework is working as expected, you can run the following command to run the sample tests:
+
+```bash
+npm run test:chromium-headed -- sauce-demo-all-pass.spec.ts
+```
+
+View the report with:
+
+```bash
+npx playwright show-report
 ```
 
 ## Contributing
