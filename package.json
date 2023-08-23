@@ -1,6 +1,6 @@
 {
   "name": "vasu-playwright-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Playwright TypeScript CLI to initialize/update with sample plywright tests, framework setup and utilities",
   "repository": "github:vasu31dev/playwright-ts-cli",
   "homepage": "https://github.com/vasu31dev/playwright-ts-template#readme",
@@ -39,7 +39,6 @@
     "prebuild": "npm run clean",
     "build": "tsc",
     "watch": "npm run build -- --watch",
-    "postinstall": "npm run build",
     "prepublishOnly": "npm run build",
     "link": "npm run build && npm link",
     "test": "playwright test"
