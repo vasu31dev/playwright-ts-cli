@@ -7,54 +7,14 @@ import { exec } from 'child_process';
 
 const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
-const FILES_AND_DIRS = [
-  '.husky',
-  'src',
-  'tests',
-  '.eslintignore',
-  '.eslintrc',
-  '.gitignore',
-  '.prettierignore',
-  '.prettierrc',
-  'package-lock.json',
-  'playwright.config.ts',
-  'tsconfig.json',
-];
-const EXCLUDE_PACKAGE_JSON_FIELDS = ['name', 'description', 'repository', 'author', 'homepage', 'bugs'];
 
-async function downloadRepo(repo: string, destination: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    download(repo, destination, { clone: true }, (err: any) => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
-}
-
-async function copyFiles(filesAndDirs: string[], source: string, destination: string) {
-  filesAndDirs.forEach(item => {
-    fs.copySync(path.join(source, item), path.join(destination, item));
-  });
-}
-
-async function checkAndInitGit() {
-  exec('git rev-parse --is-inside-work-tree', async (error, stdout) => {
-    if (error || stdout.trim() !== 'true') {
-      console.log('No existing Git repository detected. Initializing a new Git repository...');
-      await runCommand('git', ['init', '-b', 'main'], 'Initializing Git repository...');
-    } else {
-      console.log('An existing Git repository was detected. Skipping Git initialization.');
-    }
-  });
-}
-
-async function createPackageJson(source: string, destination: string) {
-  const repoPackageJsonPath = path.join(source, 'package.json');
-  const repoPackageJson = JSON.parse(fs.readFileSync(repoPackageJsonPath, 'utf8'));
-  const packageJson = { ...repoPackageJson };
-  EXCLUDE_PACKAGE_JSON_FIELDS.forEach(field => delete packageJson[field]);
-  fs.writeFileSync(destination, JSON.stringify(packageJson, null, 2));
-}
+// Define the fields to modify in package.json
+const MODIFY_PACKAGE_JSON_FIELDS = {
+  name: 'playwright-e2e-tests',
+  repository: '',
+  author: '',
+  exclude: ['homepage', 'bugs'],
+};
 
 export async function initProject() {
   try {
@@ -63,8 +23,8 @@ export async function initProject() {
     }
     await downloadRepo(REPO_URL, TEMP_REPO_DIR);
     console.log('Playwright-template project cloned successfully.');
-    await copyFiles(FILES_AND_DIRS, TEMP_REPO_DIR, process.cwd());
-    await createPackageJson(TEMP_REPO_DIR, path.join(process.cwd(), 'package.json'));
+    copyEntireProject(TEMP_REPO_DIR, process.cwd()); // Copy the entire directory
+    modifyPackageJson(process.cwd());
     fs.removeSync(TEMP_REPO_DIR);
     console.log('Copied cloned files.');
     checkAndInitGit();
@@ -88,4 +48,41 @@ export function updateProject() {
   });
 
   console.log('Project update completed successfully.');
+}
+
+async function downloadRepo(repo: string, destination: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    download(repo, destination, { clone: true }, (err: any) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+}
+
+async function checkAndInitGit() {
+  exec('git rev-parse --is-inside-work-tree', async (error, stdout) => {
+    if (error || stdout.trim() !== 'true') {
+      console.log('No existing Git repository detected. Initializing a new Git repository...');
+      await runCommand('git', ['init', '-b', 'main'], 'Initializing Git repository...');
+    } else {
+      console.log('An existing Git repository was detected. Skipping Git initialization.');
+    }
+  });
+}
+
+function copyEntireProject(source: string, destination: string) {
+  fs.copySync(source, destination);
+}
+
+function modifyPackageJson(destination: string) {
+  const packageJsonPath = path.join(destination, 'package.json');
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+  // Modify the fields as per requirements
+  packageJson.name = MODIFY_PACKAGE_JSON_FIELDS.name;
+  packageJson.repository = MODIFY_PACKAGE_JSON_FIELDS.repository;
+  packageJson.author = MODIFY_PACKAGE_JSON_FIELDS.author;
+  MODIFY_PACKAGE_JSON_FIELDS.exclude.forEach(field => delete packageJson[field]);
+
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 }
