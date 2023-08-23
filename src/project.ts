@@ -27,7 +27,14 @@ export async function initProject() {
     modifyPackageJson(process.cwd());
     fs.removeSync(TEMP_REPO_DIR);
     console.log('Copied cloned files.');
-    checkAndInitGit();
+    const isGitRepo = await checkAndInitGit();
+    if (isGitRepo) {
+      console.log('Project is already part of a Git repository or a subdirectory. Skipping Husky installation.');
+    } else {
+      // If not part of a Git repository, run the Husky installation command
+      await runCommand('npx', ['husky', 'install'], 'Installing Husky...');
+    }
+
     await runCommand('npm', ['install'], 'Running npm install...');
   } catch (error) {
     console.error('Project initialization failed. See error details below:');
@@ -59,14 +66,17 @@ async function downloadRepo(repo: string, destination: string): Promise<void> {
   });
 }
 
-async function checkAndInitGit() {
-  exec('git rev-parse --is-inside-work-tree', async (error, stdout) => {
-    if (error || stdout.trim() !== 'true') {
-      console.log('No existing Git repository detected. Initializing a new Git repository...');
-      await runCommand('git', ['init', '-b', 'main'], 'Initializing Git repository...');
-    } else {
-      console.log('An existing Git repository was detected. Skipping Git initialization.');
-    }
+async function checkAndInitGit(): Promise<boolean> {
+  return new Promise<boolean>(resolve => {
+    exec('git rev-parse --is-inside-work-tree', (error, stdout) => {
+      if (error || stdout.trim() !== 'true') {
+        console.log('No existing Git repository detected. Initializing a new Git repository...');
+        resolve(false);
+      } else {
+        console.log('An existing Git repository was detected. Skipping Git initialization.');
+        resolve(true);
+      }
+    });
   });
 }
 

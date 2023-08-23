@@ -1,3 +1,9 @@
+## [0.4.1] - 2023-08-23
+
+### Changed
+
+- Modified Husky installation behavior to conditionally install only if the framework is not a subproject of an existing Git repository. This change enhances compatibility with various project structures and resolves potential conflicts when integrating the framework as a submodule or nested project within a larger Git repository.
+
 ## [0.4.0] - 2023-08-23
 
 ### Added
