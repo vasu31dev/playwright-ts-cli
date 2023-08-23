@@ -35,6 +35,7 @@
   "scripts": {
     "start": "ts-node ./index.ts",
     "clean": "rimraf dist",
+    "ready": "rimraf dist node_modules package-lock.json && npm i",
     "prebuild": "npm run clean",
     "build": "tsc",
     "watch": "npm run build -- --watch",
