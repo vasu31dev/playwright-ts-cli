@@ -42,7 +42,8 @@ Before installing the CLI, make sure to have Node.js installed on your system. H
 2. **Using Command Line (nvm)**:
    ```bash
    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-   nvm install stable
+   source ~/.nvm/nvm.sh
+   nvm install --lts
    ```
 
 ### 2. Create a Playwright Test Directory
