@@ -1,3 +1,9 @@
+## [0.3.2] - 2023-08-23
+
+### Updated
+
+- Improved Readme doc with pre-requisites, better installation steps and proper explanation
+
 ## [0.3.1] - 2023-08-22
 
 ### Fixed
