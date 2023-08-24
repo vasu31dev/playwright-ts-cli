@@ -56,7 +56,7 @@ cd playwright-e2e-tests
 ### 3. Install `vasu-playwright-cli`
 
 ```bash
-npm i vasu-playwright-cli
+npm i -D vasu-playwright-cli
 ```
 
 ## Usage
@@ -91,7 +91,7 @@ This command will update specific files or directories within the project, align
 Keep your Playwright library up to date with the latest playwright utilities which contain the helper methods that are updated regularly:
 
 ```bash
-npm i vasu-playwright-utils
+npm i -D vasu-playwright-utils
 ```
 
 ### Running Tests

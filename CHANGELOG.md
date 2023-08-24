@@ -1,17 +1,23 @@
+## [0.4.2] - 2023-08-23
+
+### Changed
+
+- Removed Husky setup when initializing the framework as a subdirectory.
+
 ## [0.4.1] - 2023-08-23
 
 ### Changed
 
-- Modified Husky installation behavior to conditionally install only if the framework is not a subproject of an existing Git repository. This change enhances compatibility with various project structures and resolves potential conflicts when integrating the framework as a submodule or nested project within a larger Git repository.
+- Modified Husky installation to conditionally install only if the framework is not a subproject of an existing Git repository. This enhancement improves compatibility with various project structures and resolves potential conflicts when integrating the framework as a submodule or nested project within a larger Git repository.
 
 ## [0.4.0] - 2023-08-23
 
 ### Added
 
-- Created new Playwright framework project with entire [vasu-playwright-template](https://github.com/vasu31dev/playwright-ts-template).
-- Improved the logic to modify the `package.json` as needed.
+- Created a new Playwright framework project using the [vasu-playwright-template](https://github.com/vasu31dev/playwright-ts-template).
+- Improved logic to modify `package.json` as needed.
 - Added Readme documentation to the downloaded Playwright framework.
-- Added sections for running tests and viewing reports in Readme documentation.
+- Included sections for running tests and viewing reports in Readme documentation.
 
 ## [0.3.2] - 2023-08-23
 
@@ -31,8 +37,8 @@
 
 - Introduced `.prettierrc` and applied formatting to TypeScript files.
 - Enhanced console logging for better readability.
-- Logic to initialize as a Git repository only if neither the current nor parent directory is a Git repository.
-- Resolution for Git warning related to the initial branch name.
+- Added logic to initialize as a Git repository only if neither the current nor parent directory is a Git repository.
+- Resolved Git warning related to the initial branch name.
 
 ### Fixed
 

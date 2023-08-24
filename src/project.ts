@@ -23,17 +23,11 @@ export async function initProject() {
     }
     await downloadRepo(REPO_URL, TEMP_REPO_DIR);
     console.log('Playwright-template project cloned successfully.');
-    copyEntireProject(TEMP_REPO_DIR, process.cwd()); // Copy the entire directory
-    modifyPackageJson(process.cwd());
+    const isSubdirectory = await checkAndInitGit();
+    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory
+    modifyPackageJson(process.cwd(), isSubdirectory);
     fs.removeSync(TEMP_REPO_DIR);
     console.log('Copied cloned files.');
-    const isGitRepo = await checkAndInitGit();
-    if (isGitRepo) {
-      console.log('Project is already part of a Git repository or a subdirectory. Skipping Husky installation.');
-    } else {
-      // If not part of a Git repository, run the Husky installation command
-      await runCommand('npx', ['husky', 'install'], 'Installing Husky...');
-    }
 
     await runCommand('npm', ['install'], 'Running npm install...');
   } catch (error) {
@@ -66,12 +60,27 @@ async function downloadRepo(repo: string, destination: string): Promise<void> {
   });
 }
 
-async function checkAndInitGit(): Promise<boolean> {
+async function checkAndInitGit() {
   return new Promise<boolean>(resolve => {
-    exec('git rev-parse --is-inside-work-tree', (error, stdout) => {
+    // Check if the current directory is inside a Git work tree
+    exec('git rev-parse --is-inside-work-tree', async (error, stdout) => {
       if (error || stdout.trim() !== 'true') {
-        console.log('No existing Git repository detected. Initializing a new Git repository...');
-        resolve(false);
+        // Check if the current directory is a subdirectory of another directory
+        exec('git rev-parse --show-toplevel', async (subDirError, topLevelDir) => {
+          if (subDirError || !topLevelDir) {
+            console.log('No existing Git repository detected. Initializing a new Git repository...');
+            try {
+              await runCommand('git', ['init', '-b', 'main'], 'Initializing Git repository...');
+              resolve(false);
+            } catch (initError) {
+              console.error('Failed to initialize Git repository:', initError);
+              resolve(false);
+            }
+          } else {
+            console.log('Project is installed as a subdirectory. Skipping Git initialization.');
+            resolve(true);
+          }
+        });
       } else {
         console.log('An existing Git repository was detected. Skipping Git initialization.');
         resolve(true);
@@ -80,11 +89,15 @@ async function checkAndInitGit(): Promise<boolean> {
   });
 }
 
-function copyEntireProject(source: string, destination: string) {
-  fs.copySync(source, destination);
+function copyEntireProject(source: string, destination: string, isSubdirectory: boolean) {
+  fs.copySync(source, destination, {
+    filter: src => {
+      return isSubdirectory ? !src.includes('.husky') : true; // Exclude .husky folder if the repo is copied as a subdirectory
+    },
+  });
 }
 
-function modifyPackageJson(destination: string) {
+function modifyPackageJson(destination: string, isSubdirectory: boolean) {
   const packageJsonPath = path.join(destination, 'package.json');
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
@@ -93,6 +106,11 @@ function modifyPackageJson(destination: string) {
   packageJson.repository = MODIFY_PACKAGE_JSON_FIELDS.repository;
   packageJson.author = MODIFY_PACKAGE_JSON_FIELDS.author;
   MODIFY_PACKAGE_JSON_FIELDS.exclude.forEach(field => delete packageJson[field]);
+
+  // Remove the "prepare": "husky install" script if the repo is copied as a subdirectory
+  if (isSubdirectory && packageJson.scripts && packageJson.scripts.prepare) {
+    delete packageJson.scripts.prepare;
+  }
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 }
