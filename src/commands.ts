@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import spawn from 'cross-spawn';
 
 export function runCommand(command: string, args: string[], description: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -12,6 +12,11 @@ export function runCommand(command: string, args: string[], description: string)
         console.log(`${description} completed successfully!`);
         resolve();
       }
+    });
+
+    child.on('error', error => {
+      console.error(`Failed to start child process: ${error}`);
+      reject(error);
     });
   });
 }
