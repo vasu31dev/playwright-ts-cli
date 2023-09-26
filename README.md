@@ -90,7 +90,7 @@ This command will update specific files or directories within the project, align
 Keep your Playwright library up to date with the latest playwright utilities which contain the helper methods that are updated regularly:
 
 ```bash
-npm i -D vasu-playwright-utils
+npm i -D vasu-playwright-utils@latest
 ```
 
 ### Running Tests
