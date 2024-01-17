@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.1] - 2024-01-17
+
+### Updated Dependencies
+
+- Updated all the dependencies to their latest versions.
+
 ## [0.5.0] - 2023-08-26
 
 ### Features
