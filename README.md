@@ -1,8 +1,7 @@
 # Playwright TypeScript CLI
 
 | [![GitHub stars](https://img.shields.io/github/stars/vasu31dev/playwright-ts-cli)](https://github.com/vasu31dev/playwright-ts-cli/stargazers) | ![Last Commit](https://img.shields.io/github/last-commit/vasu31dev/playwright-ts-cli) | ![Pull Requests](https://img.shields.io/github/issues-pr-raw/vasu31dev/playwright-ts-cli) | [![NPM Package](https://img.shields.io/npm/v/vasu-playwright-cli)](https://www.npmjs.com/package/vasu-playwright-cli) | <a href="https://www.linkedin.com/in/vasudeva-chowdary-annam-802126a2/" target="_blank"><img src="https://img.icons8.com/fluent/48/000000/linkedin.png" width="28" alt="LinkedIn"></a> | [vasu31dev@gmail.com](mailto:vasu31dev@gmail.com) |
-| :---: | :---: | :---: | :---: | :---: | :---: |
-
+| :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------: |
 
 ## About
 
@@ -107,9 +106,13 @@ View the report with:
 npx playwright show-report
 ```
 
+## Issues and Feedback
+
+If you encounter any issues or have feedback, please [Raise an Issue](https://github.com/vasu31dev/playwright-ts-cli/issues) on GitHub.
+
 ## Contributing
 
-We welcome contributions! Feel free to open an issue or submit a pull request on [GitHub](https://github.com/vasu31dev/playwright-ts-cli).
+We welcome contributions! Feel free to submit a [Pull Request](https://github.com/vasu31dev/playwright-ts-cli/pulls) on GitHub.
 
 ## License
 
