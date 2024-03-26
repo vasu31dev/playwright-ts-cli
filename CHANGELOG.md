@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.2] - 2024-03-26
+
+### Bug Fixes
+
+- **Copy README.md**: Copy the README.md file using node-fetch.
+
 ## [1.6.1] - 2024-03-26
 
 ### Bug Fixes

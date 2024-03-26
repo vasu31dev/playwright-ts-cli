@@ -4,10 +4,13 @@ import * as path from 'path';
 import download from 'download-git-repo';
 import { runCommand } from './commands';
 import { exec } from 'child_process';
+import fetch from 'node-fetch';
 
 const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
 const README_PATH = 'template-files/README.md';
+const DOWNLOAD_URL = 'https://raw.githubusercontent.com/vasu31dev/playwright-ts-cli/main/template-files/README.md';
+const DESTINATION_PATH = path.join(TEMP_REPO_DIR, 'README.md');
 
 // Define the fields to modify in package.json
 const MODIFY_PACKAGE_JSON_FIELDS = {
@@ -27,6 +30,7 @@ export async function initProject() {
     const isSubdirectory = await checkAndInitGit();
     copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory expect README.md file and docs folder
     fs.copySync(path.join(process.cwd(), README_PATH), path.join(TEMP_REPO_DIR, 'README.md')); // Copy README.md file
+    await downloadFile(DOWNLOAD_URL, DESTINATION_PATH).catch(error => console.error('Error downloading file:', error));
     modifyPackageJson(process.cwd(), isSubdirectory);
     fs.removeSync(TEMP_REPO_DIR);
     console.log('Copied cloned files.');
@@ -101,6 +105,16 @@ function copyEntireProject(source: string, destination: string, isSubdirectory: 
       return isSubdirectory ? !src.includes('.husky') : true; // Exclude .husky folder if the repo is copied as a subdirectory
     },
   });
+}
+
+async function downloadFile(url: string, outputPath: string) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download file: ${response.statusText}`);
+  }
+  const buffer = await response.buffer();
+  fs.writeFileSync(outputPath, buffer);
+  console.log(`File downloaded successfully to ${outputPath}`);
 }
 
 function modifyPackageJson(destination: string, isSubdirectory: boolean) {
