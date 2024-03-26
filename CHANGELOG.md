@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.6.0] - 2024-03-26
+
+### Features
+
+- Added a basic `README.md` file to the project. This file includes a link to the Playwright template repository, providing users with additional resources and information about the project structure and usage.
+
+### Updated Dependencies
+
+- Updated all the dependencies to their latest versions.
+
 ## [0.5.1] - 2024-01-17
 
 ### Updated Dependencies
@@ -51,7 +61,7 @@
 - **Code Formatting**: Introduced `.prettierrc` and applied formatting to TypeScript files.
 - **Logging**: Enhanced console logging for better readability.
 - **Git Initialization**: Added logic to initialize as a Git repository only under specific conditions.
-  
+
 ### Bug Fixes
 
 - **Git Warning**: Resolved a Git warning related to the initial branch name.
