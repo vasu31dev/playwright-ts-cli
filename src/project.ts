@@ -6,7 +6,8 @@ import { runCommand } from './commands';
 import { exec } from 'child_process';
 import { RequestInfo, RequestInit } from 'node-fetch';
 
-const fetch = (...args: [RequestInfo, RequestInit?]) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args: [RequestInfo, RequestInit?]) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
@@ -31,7 +32,6 @@ export async function initProject() {
     console.log('Playwright-template project cloned successfully.');
     const isSubdirectory = await checkAndInitGit();
     copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory expect README.md file and docs folder
-    fs.copySync(path.join(process.cwd(), README_PATH), path.join(TEMP_REPO_DIR, 'README.md')); // Copy README.md file
     await downloadFile(DOWNLOAD_URL, DESTINATION_PATH).catch(error => console.error('Error downloading file:', error));
     modifyPackageJson(process.cwd(), isSubdirectory);
     fs.removeSync(TEMP_REPO_DIR);
