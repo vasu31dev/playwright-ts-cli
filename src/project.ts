@@ -4,7 +4,9 @@ import * as path from 'path';
 import download from 'download-git-repo';
 import { runCommand } from './commands';
 import { exec } from 'child_process';
-import fetch from 'node-fetch';
+import { RequestInfo, RequestInit } from 'node-fetch';
+
+const fetch = (...args: [RequestInfo, RequestInit?]) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
