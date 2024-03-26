@@ -4,10 +4,7 @@ import * as path from 'path';
 import download from 'download-git-repo';
 import { runCommand } from './commands';
 import { exec } from 'child_process';
-import { RequestInfo, RequestInit } from 'node-fetch';
-
-const fetch = (...args: [RequestInfo, RequestInit?]) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
+import axios from 'axios';
 
 const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
@@ -110,13 +107,13 @@ function copyEntireProject(source: string, destination: string, isSubdirectory: 
 }
 
 async function downloadFile(url: string, outputPath: string) {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to download file: ${response.statusText}`);
+  try {
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    fs.writeFileSync(outputPath, response.data);
+    console.log(`File downloaded successfully to ${outputPath}`);
+  } catch (error) {
+    console.error('Error downloading file:', error);
   }
-  const buffer = await response.buffer();
-  fs.writeFileSync(outputPath, buffer);
-  console.log(`File downloaded successfully to ${outputPath}`);
 }
 
 function modifyPackageJson(destination: string, isSubdirectory: boolean) {
