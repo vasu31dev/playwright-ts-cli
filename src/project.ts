@@ -7,6 +7,7 @@ import { exec } from 'child_process';
 
 const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
+const README_PATH = 'template-files/README.md';
 
 // Define the fields to modify in package.json
 const MODIFY_PACKAGE_JSON_FIELDS = {
@@ -24,7 +25,8 @@ export async function initProject() {
     await downloadRepo(REPO_URL, TEMP_REPO_DIR);
     console.log('Playwright-template project cloned successfully.');
     const isSubdirectory = await checkAndInitGit();
-    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory
+    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory expect README.md file and docs folder
+    fs.copySync(path.join(TEMP_REPO_DIR, README_PATH), path.join(process.cwd(), 'README.md')); // Copy README.md file
     modifyPackageJson(process.cwd(), isSubdirectory);
     fs.removeSync(TEMP_REPO_DIR);
     console.log('Copied cloned files.');
@@ -92,6 +94,10 @@ async function checkAndInitGit() {
 function copyEntireProject(source: string, destination: string, isSubdirectory: boolean) {
   fs.copySync(source, destination, {
     filter: src => {
+      const baseName = path.basename(src);
+      if (baseName === 'README.md' || baseName === 'docs') {
+        return false; // Exclude README.md file and docs folder
+      }
       return isSubdirectory ? !src.includes('.husky') : true; // Exclude .husky folder if the repo is copied as a subdirectory
     },
   });
