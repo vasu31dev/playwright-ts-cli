@@ -26,7 +26,7 @@ export async function initProject() {
     console.log('Playwright-template project cloned successfully.');
     const isSubdirectory = await checkAndInitGit();
     copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory expect README.md file and docs folder
-    fs.copySync(path.join(TEMP_REPO_DIR, README_PATH), path.join(process.cwd(), 'README.md')); // Copy README.md file
+    fs.copySync(path.join(process.cwd(), README_PATH), path.join(TEMP_REPO_DIR, 'README.md')); // Copy README.md file
     modifyPackageJson(process.cwd(), isSubdirectory);
     fs.removeSync(TEMP_REPO_DIR);
     console.log('Copied cloned files.');

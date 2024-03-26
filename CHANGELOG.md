@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.1] - 2024-03-26
+
+### Bug Fixes
+
+- **Copy README.md**: Fixed the issue to copy the correct README.md file.
+
 ## [1.6.0] - 2024-03-26
 
 ### Features
