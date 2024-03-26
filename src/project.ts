@@ -10,7 +10,7 @@ const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git
 const TEMP_REPO_DIR = 'temp-repo';
 const README_PATH = 'template-files/README.md';
 const DOWNLOAD_URL = 'https://raw.githubusercontent.com/vasu31dev/playwright-ts-cli/main/template-files/README.md';
-const DESTINATION_PATH = path.join(TEMP_REPO_DIR, 'README.md');
+const DESTINATION_PATH = path.join(process.cwd(), 'README.md');
 
 // Define the fields to modify in package.json
 const MODIFY_PACKAGE_JSON_FIELDS = {
@@ -25,13 +25,13 @@ export async function initProject() {
     if (fs.existsSync(TEMP_REPO_DIR)) {
       fs.removeSync(TEMP_REPO_DIR);
     }
-    await downloadRepo(REPO_URL, TEMP_REPO_DIR);
+    await downloadRepo(REPO_URL, TEMP_REPO_DIR); // Clone the Playwright-template project in to a temp directory
     console.log('Playwright-template project cloned successfully.');
     const isSubdirectory = await checkAndInitGit();
-    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire directory expect README.md file and docs folder
-    await downloadFile(DOWNLOAD_URL, DESTINATION_PATH).catch(error => console.error('Error downloading file:', error));
+    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire TEMP_REPO_DIR directory expect README.md file and docs folder
+    await downloadFile(DOWNLOAD_URL, DESTINATION_PATH).catch(error => console.error('Error downloading file:', error)); // Download README.md file
     modifyPackageJson(process.cwd(), isSubdirectory);
-    fs.removeSync(TEMP_REPO_DIR);
+    fs.removeSync(TEMP_REPO_DIR); // Remove the temp directory
     console.log('Copied cloned files.');
 
     await runCommand('npm', ['install'], 'Running npm install...');
