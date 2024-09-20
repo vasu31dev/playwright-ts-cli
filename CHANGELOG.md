@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.1] - 2024-09-19
+
+### Bug Fixes
+
+- Fixed issues encountered during the migration from `download-git-repo` to `simple-git` for cloning repositories. This resolves problems related to URL redirection and branch checkout.
+
 ## [1.7.0] - 2024-09-19
 
 ### Updated Dependencies

@@ -1,8 +1,11 @@
 {
   "name": "vasu-playwright-cli",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Playwright TypeScript CLI to initialize/update with sample Playwright tests, framework setup and utilities",
-  "repository": "github:vasu31dev/playwright-ts-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasu31dev/playwright-ts-cli.git"
+  },
   "homepage": "https://github.com/vasu31dev/playwright-ts-template#readme",
   "bugs": {
     "url": "https://github.com/vasu31dev/playwright-ts-cli/issues"
@@ -16,7 +19,7 @@
   },
   "main": "./dist/cli.js",
   "bin": {
-    "vasu-playwright-cli": "./dist/cli.js"
+    "vasu-playwright-cli": "dist/cli.js"
   },
   "keywords": [
     "playwright",

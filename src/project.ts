@@ -6,13 +6,14 @@ import { exec } from 'child_process';
 import axios from 'axios';
 import simpleGit from 'simple-git';
 
-const REPO_URL = 'https://github.com/vasu31dev/playwright-ts-template.git#main';
+const git = simpleGit();
+
+const REPO_URL = 'https://github.com/vasu31dev/playwright-ts-template.git';
+const REPO_BRANCH = 'main';
 const TEMP_REPO_DIR = 'temp-repo';
 const README_PATH = 'template-files/README.md';
 const DOWNLOAD_URL = 'https://raw.githubusercontent.com/vasu31dev/playwright-ts-cli/main/template-files/README.md';
 const DESTINATION_PATH = path.join(process.cwd(), 'README.md');
-
-const git = simpleGit();
 
 // Define the fields to modify in package.json
 const MODIFY_PACKAGE_JSON_FIELDS = {
@@ -27,7 +28,7 @@ export async function initProject() {
     if (fs.existsSync(TEMP_REPO_DIR)) {
       fs.removeSync(TEMP_REPO_DIR);
     }
-    await downloadRepo(REPO_URL, TEMP_REPO_DIR); // Clone the Playwright-template project into a temp directory
+    await downloadRepo(REPO_URL, REPO_BRANCH, TEMP_REPO_DIR); // Clone the Playwright-template project into a temp directory
     console.log('Playwright-template project cloned successfully.');
     const isSubdirectory = await checkAndInitGit();
     copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire TEMP_REPO_DIR directory except README.md file and docs folder
@@ -58,10 +59,11 @@ export function updateProject() {
   console.log('Project update completed successfully.');
 }
 
-async function downloadRepo(repo: string, destination: string): Promise<void> {
+async function downloadRepo(repo: string, branch: string, destination: string): Promise<void> {
   try {
     await git.clone(repo, destination);
-    console.log(`Repository cloned to ${destination}`);
+    await git.cwd(destination).checkout(branch);
+    console.log(`Repository cloned to ${destination} and checked out to branch ${branch}`);
   } catch (error) {
     console.error('Failed to clone repository:', error);
     throw error;
