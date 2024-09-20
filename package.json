@@ -1,6 +1,6 @@
 {
   "name": "vasu-playwright-cli",
-  "version": "1.6.6",
+  "version": "1.7.0",
   "description": "Playwright TypeScript CLI to initialize/update with sample Playwright tests, framework setup and utilities",
   "repository": "github:vasu31dev/playwright-ts-cli",
   "homepage": "https://github.com/vasu31dev/playwright-ts-template#readme",
@@ -46,14 +46,14 @@
   "dependencies": {
     "@types/cross-spawn": "^6.0.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.11.30",
-    "axios": "^1.6.8",
-    "commander": "^12.0.0",
+    "@types/node": "^22.5.5",
+    "axios": "^1.7.7",
+    "commander": "^12.1.0",
     "cross-spawn": "^7.0.3",
-    "download-git-repo": "^3.0.2",
     "fs-extra": "^11.2.0",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.1",
+    "simple-git": "^3.27.0",
     "ts-node": "^10.9.2",
-    "typescript": "5.4.3"
+    "typescript": "5.6.2"
   }
 }

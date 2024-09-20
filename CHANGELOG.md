@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0] - 2024-09-19
+
+### Updated Dependencies
+
+- Updated all the dependencies to their latest versions.
+- Replaced `download-git-repo` with `simple-git` for cloning repositories.
+
 ## [1.6.6] - 2024-03-26
 
 ### Bug Fixes

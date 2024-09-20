@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import download from 'download-git-repo';
 import { runCommand } from './commands';
 import { exec } from 'child_process';
 import axios from 'axios';
+import simpleGit from 'simple-git';
 
-const REPO_URL = 'direct:https://github.com/vasu31dev/playwright-ts-template.git#main';
+const REPO_URL = 'https://github.com/vasu31dev/playwright-ts-template.git#main';
 const TEMP_REPO_DIR = 'temp-repo';
 const README_PATH = 'template-files/README.md';
 const DOWNLOAD_URL = 'https://raw.githubusercontent.com/vasu31dev/playwright-ts-cli/main/template-files/README.md';
 const DESTINATION_PATH = path.join(process.cwd(), 'README.md');
+
+const git = simpleGit();
 
 // Define the fields to modify in package.json
 const MODIFY_PACKAGE_JSON_FIELDS = {
@@ -25,10 +27,10 @@ export async function initProject() {
     if (fs.existsSync(TEMP_REPO_DIR)) {
       fs.removeSync(TEMP_REPO_DIR);
     }
-    await downloadRepo(REPO_URL, TEMP_REPO_DIR); // Clone the Playwright-template project in to a temp directory
+    await downloadRepo(REPO_URL, TEMP_REPO_DIR); // Clone the Playwright-template project into a temp directory
     console.log('Playwright-template project cloned successfully.');
     const isSubdirectory = await checkAndInitGit();
-    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire TEMP_REPO_DIR directory expect README.md file and docs folder
+    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire TEMP_REPO_DIR directory except README.md file and docs folder
     await downloadFile(DOWNLOAD_URL, DESTINATION_PATH).catch(error => console.error('Error downloading file:', error)); // Download README.md file
     modifyPackageJson(process.cwd(), isSubdirectory);
     fs.removeSync(TEMP_REPO_DIR); // Remove the temp directory
@@ -57,12 +59,13 @@ export function updateProject() {
 }
 
 async function downloadRepo(repo: string, destination: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    download(repo, destination, { clone: true }, (err: any) => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
+  try {
+    await git.clone(repo, destination);
+    console.log(`Repository cloned to ${destination}`);
+  } catch (error) {
+    console.error('Failed to clone repository:', error);
+    throw error;
+  }
 }
 
 async function checkAndInitGit() {
