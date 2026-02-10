@@ -1,8 +1,17 @@
 import spawn from 'cross-spawn';
 
-export function runCommand(command: string, args: string[], description: string): Promise<void> {
+export function runCommand(
+  command: string,
+  args: string[],
+  description: string,
+  cwd?: string
+): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: 'inherit' });
+    const spawnOpts: { stdio: 'inherit'; cwd?: string } = { stdio: 'inherit' };
+    if (cwd) {
+      spawnOpts.cwd = cwd;
+    }
+    const child = spawn(command, args, spawnOpts);
 
     child.on('close', code => {
       if (code !== 0) {

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.0] - 2025-02-09
+
+### Features
+
+- **Project initialization**: Project is now created in a `playwright-ts-scripts` directory for a cleaner, predictable layout.
+
+### Updated Dependencies
+
+- Updated all the dependencies to their latest versions.
+
 ## [1.7.1] - 2024-09-19
 
 ### Bug Fixes

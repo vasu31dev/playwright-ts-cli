@@ -11,9 +11,9 @@ const git = simpleGit();
 const REPO_URL = 'https://github.com/vasu31dev/playwright-ts-template.git';
 const REPO_BRANCH = 'main';
 const TEMP_REPO_DIR = 'temp-repo';
+const PROJECT_FOLDER_NAME = 'playwright-ts-scripts';
 const README_PATH = 'template-files/README.md';
 const DOWNLOAD_URL = 'https://raw.githubusercontent.com/vasu31dev/playwright-ts-cli/main/template-files/README.md';
-const DESTINATION_PATH = path.join(process.cwd(), 'README.md');
 
 // Define the fields to modify in package.json
 const MODIFY_PACKAGE_JSON_FIELDS = {
@@ -24,20 +24,33 @@ const MODIFY_PACKAGE_JSON_FIELDS = {
 };
 
 export async function initProject() {
+  const projectDir = path.join(process.cwd(), PROJECT_FOLDER_NAME);
+  const tempRepoDir = path.join(projectDir, TEMP_REPO_DIR);
+
   try {
-    if (fs.existsSync(TEMP_REPO_DIR)) {
-      fs.removeSync(TEMP_REPO_DIR);
+    if (fs.existsSync(projectDir)) {
+      console.error(`Folder "${PROJECT_FOLDER_NAME}" already exists in the current directory.`);
+      console.error('Please choose a different directory or remove the existing folder.');
+      return;
     }
-    await downloadRepo(REPO_URL, REPO_BRANCH, TEMP_REPO_DIR); // Clone the Playwright-template project into a temp directory
+
+    fs.mkdirSync(projectDir, { recursive: true });
+    console.log(`Created project folder: ${PROJECT_FOLDER_NAME}`);
+
+    await downloadRepo(REPO_URL, REPO_BRANCH, tempRepoDir);
     console.log('Playwright-template project cloned successfully.');
-    const isSubdirectory = await checkAndInitGit();
-    copyEntireProject(TEMP_REPO_DIR, process.cwd(), isSubdirectory); // Copy the entire TEMP_REPO_DIR directory except README.md file and docs folder
-    await downloadFile(DOWNLOAD_URL, DESTINATION_PATH).catch(error => console.error('Error downloading file:', error)); // Download README.md file
-    modifyPackageJson(process.cwd(), isSubdirectory);
-    fs.removeSync(TEMP_REPO_DIR); // Remove the temp directory
+
+    const isSubdirectory = await checkAndInitGit(projectDir);
+    copyEntireProject(tempRepoDir, projectDir, isSubdirectory);
+    await downloadFile(DOWNLOAD_URL, path.join(projectDir, 'README.md')).catch(error =>
+      console.error('Error downloading file:', error)
+    );
+    modifyPackageJson(projectDir, isSubdirectory);
+    fs.removeSync(tempRepoDir);
     console.log('Copied cloned files.');
 
-    await runCommand('npm', ['install'], 'Running npm install...');
+    await runCommand('npm', ['install'], 'Running npm install...', projectDir);
+    console.log(`\nProject ready. Run: cd ${PROJECT_FOLDER_NAME}`);
   } catch (error) {
     console.error('Project initialization failed. See error details below:');
     console.error('Error details:', error);
@@ -70,17 +83,16 @@ async function downloadRepo(repo: string, branch: string, destination: string): 
   }
 }
 
-async function checkAndInitGit() {
+async function checkAndInitGit(projectDir: string) {
   return new Promise<boolean>(resolve => {
-    // Check if the current directory is inside a Git work tree
-    exec('git rev-parse --is-inside-work-tree', async (error, stdout) => {
+    const execOpts = { cwd: projectDir };
+    exec('git rev-parse --is-inside-work-tree', execOpts, async (error, stdout) => {
       if (error || stdout.trim() !== 'true') {
-        // Check if the current directory is a subdirectory of another directory
-        exec('git rev-parse --show-toplevel', async (subDirError, topLevelDir) => {
+        exec('git rev-parse --show-toplevel', execOpts, async (subDirError, topLevelDir) => {
           if (subDirError || !topLevelDir) {
             console.log('No existing Git repository detected. Initializing a new Git repository...');
             try {
-              await runCommand('git', ['init', '-b', 'main'], 'Initializing Git repository...');
+              await runCommand('git', ['init', '-b', 'main'], 'Initializing Git repository...', projectDir);
               resolve(false);
             } catch (initError) {
               console.error('Failed to initialize Git repository:', initError);
@@ -100,15 +112,19 @@ async function checkAndInitGit() {
 }
 
 function copyEntireProject(source: string, destination: string, isSubdirectory: boolean) {
-  fs.copySync(source, destination, {
-    filter: src => {
-      const baseName = path.basename(src);
-      if (baseName === 'README.md' || baseName === 'docs') {
-        return false; // Exclude README.md file and docs folder
-      }
-      return isSubdirectory ? !src.includes('.husky') : true; // Exclude .husky folder if the repo is copied as a subdirectory
-    },
-  });
+  const entries = fs.readdirSync(source, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(source, entry.name);
+    const destPath = path.join(destination, entry.name);
+    const baseName = path.basename(srcPath);
+    if (baseName === 'README.md' || baseName === 'docs') {
+      continue; // Exclude README.md and docs folder
+    }
+    if (isSubdirectory && baseName === '.husky') {
+      continue; // Exclude .husky folder if the repo is copied as a subdirectory
+    }
+    fs.copySync(srcPath, destPath);
+  }
 }
 
 async function downloadFile(url: string, outputPath: string) {
